@@ -1,32 +1,5 @@
-class Queue {
-  constructor() {
-    this.items = [];
-  }
+import Queue from "./utils/queue";
 
-  enqueue(element) {
-    this.items.push(element);
-  }
-
-  dequeue() {
-    return this.isEmpty() ? null : this.items.shift();
-  }
-
-  peek() {
-    return this.isEmpty() ? "Queue is empty" : this.items[0];
-  }
-
-  isEmpty() {
-    return this.items.length === 0;
-  }
-
-  size() {
-    return this.items.length;
-  }
-
-  print() {
-    console.log(this.items.join(" -> "));
-  }
-}
 function bfs(graph, root) {
   let Q = new Queue();
   Q.enqueue(root);
