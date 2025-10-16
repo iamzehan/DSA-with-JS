@@ -45,20 +45,20 @@ class HashMap {
 
   // set the keys and values
   set(key, value) {
-    if (this.grow()) {
-      let keys = this.keys();
-      let values = this.values();
-      this.indexer = [];
+    if (this.grow()) { // if the loadFactor exceeds
+      let keys = this.keys(); // store the current keys
+      let values = this.values(); // store the current values
+      this.indexer = []; // empty the indexer
       for (let cap = 0; cap < this.capacity * 2; cap++) {
-        this.indexer.push([]);
+        this.indexer.push([]); // double the capacity
       }
-      this.capacity = this.indexer.length;
+      this.capacity = this.indexer.length; // update the capacity
       for (let i = 0; i < keys.length; i++) {
-        this.#add(keys[i], values[i]);
+        this.#add(keys[i], values[i]); // add all the previous keys and values
       }
-      this.#add(key, value);
+      this.#add(key, value); // add the new key and value
     } else {
-      this.#add(key, value);
+      this.#add(key, value); // if the loadFactor doesn't exceed then keep adding
     }
   }
 
@@ -68,7 +68,7 @@ class HashMap {
     let result = this.indexer[k].find((value) => value[0] == key)[1];
     return result;
   }
-  // see if a key exists in the hashmap
+  // find out if a key exists in the hashmap
   has(key) {
     const k = this.#hash(key, this.capacity);
     let result = this.indexer[k].find((value) => value[0] == key);
@@ -84,6 +84,7 @@ class HashMap {
     });
     return "Removed -> " + key;
   }
+
   // get the number of stored keys in the hashmap
   length() {
     let length = 0;
@@ -92,6 +93,7 @@ class HashMap {
     });
     return length;
   }
+
   // clear the whole thing
   clear() {
     return (this.indexer = new HashMap().indexer);
@@ -134,8 +136,11 @@ class HashMap {
     return (this.length() + 1) / this.capacity > this.loadFactor;
   }
 }
+
+// create a new hashmap instance
 const test = new HashMap();
-console.log(test.prettyPrint());
+
+// add values to it
 test.set("apple", "red");
 test.set("banana", "yellow");
 test.set("carrot", "orange");
@@ -151,7 +156,7 @@ test.set("kite", "pink");
 test.set("lion", "golden");
 test.set("moon", "silver");
 
-// let's test it out
+// let's test it out with the methods available to us
 console.log(test.prettyPrint());
 console.table(test.entries());
 console.table(test.get("apple"));
