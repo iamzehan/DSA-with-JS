@@ -2,7 +2,7 @@ import LinkedList from "./LinkedList.js";
 
 class HashMap {
   constructor() {
-    this.loadFactor = 0.75;
+    this.loadFactor = 0.75; // ratio between total Entries & total capacity, if it exceeds the that threshold we rearrange and grow our number of buckets
     this.indexer = [
       [],
       [],
@@ -10,7 +10,7 @@ class HashMap {
       [],
       [],
       [],
-      [],   // 16 initial buckets
+      [], // 16 initial buckets
       [],
       [],
       [],
@@ -24,7 +24,7 @@ class HashMap {
     this.capacity = this.indexer.length;
   }
 
-  // our private method of hashing, 
+  // our private method of hashing,
   // we made it inaccessible outside of this class
   #hash(key, len) {
     let hashCode = 0;
@@ -37,10 +37,8 @@ class HashMap {
 
     return hashCode;
   }
-  // set the keys and values
-  set(key, value) {
-    // check if we should grow our bucket size
-    this.grow();
+
+  #add(key, value) {
     const k = this.#hash(key, this.capacity);
     if (this.indexer[k].length == 0) {
       this.indexer[k].push([key, value]);
@@ -58,6 +56,27 @@ class HashMap {
       }
     }
   }
+
+  // set the keys and values
+  set(key, value) {
+    if(this.grow()){
+      let keys = this.keys();
+      let values = this.values();
+      this.indexer = []
+      for (let cap=0; cap<this.capacity*2; cap++){
+        this.indexer.push([]);
+      }
+      this.capacity = this.indexer.length;
+      for(let i=0; i < keys.length; i++){
+        this.#add(keys[i], values[i]);
+      }
+      this.#add(key, value);
+    }
+    else{
+      this.#add(key, value);
+    }
+  }
+
   // get value of a key
   get(key) {
     const k = this.#hash(key, this.capacity);
@@ -78,8 +97,7 @@ class HashMap {
         this.indexer[k].splice(idx, 1);
       }
     });
-
-    return this.entries();
+    return "Removed -> "+key;
   }
   // get the number of stored keys in the hashmap
   length() {
@@ -107,13 +125,13 @@ class HashMap {
 
   // get the list of stored values
   values() {
-    let keys = [];
+    let values = [];
     this.entries().forEach((items) => {
       items.forEach((value) => {
-        keys.push(value[1]);
+        values.push(value[1]);
       });
     });
-    return keys;
+    return values;
   }
 
   // get a pretty output
@@ -127,15 +145,9 @@ class HashMap {
 
   // check when to grow the capacity of buckets
   grow() {
-    if (this.entries().length > this.loadFactor * this.capacity) {
-      for (let cap = 0; cap < this.capacity; c++) {
-        this.indexer.push([]);
-      }
-    }
-    this.capacity = this.indexer.length;
+    return (this.length() + 1) / this.capacity > this.loadFactor;
   }
 }
-
 const test = new HashMap();
 test.set("apple", "red");
 test.set("banana", "yellow");
@@ -150,13 +162,19 @@ test.set("ice cream", "white");
 test.set("jacket", "blue");
 test.set("kite", "pink");
 test.set("lion", "golden");
+test.set("moon", "silver");
 
-console.log(test.entries());
-// console.log(test.get("apple"));
-// console.log(test.has("apple"));
-// console.log(test.remove("apple"));
-// console.log(test.remove("lion"));
-// console.log(test.length());
-// console.log(test.clear());
-// console.log(test.keys());
-// console.log(test.values());
+// let's test it out
+console.table(test.entries());
+console.table(test.get("apple"));
+console.table(test.has("apple"));
+console.table(test.entries());
+console.table(test.remove("apple"));
+console.table(test.entries());
+console.table(test.remove("lion"));
+console.table(test.entries());
+console.table(test.length());
+console.table(test.keys());
+console.table(test.values());
+console.table(test.clear());
+console.table(test.indexer);
