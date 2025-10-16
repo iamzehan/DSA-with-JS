@@ -1,4 +1,4 @@
-import Queue from "./utils/queue";
+import Queue from "./utils/queue.js";
 
 function bfs(graph, root) {
   let Q = new Queue();
