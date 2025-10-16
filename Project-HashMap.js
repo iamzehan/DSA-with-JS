@@ -3,27 +3,29 @@ class HashMap {
     this.loadFactor = 0.75; // ratio between total Entries & total capacity, if it exceeds the that threshold we rearrange and grow our number of buckets
     this.indexer = [
       [],[],[],[],
-      [],[],[],[],
+      [],[],[],[], // initialize with 16 bucket capacity
       [],[],[],[],
       [],[],[],[],
     ];
-    this.capacity = this.indexer.length;
+    this.capacity = this.indexer.length; // current capacity or the number of buckets available to us
   }
 
   // our private method of hashing,
   // we made it inaccessible outside of this class
-  #hash(key, len) {
+  #hash(key, capacity) {
     let hashCode = 0;
-
+    // according to algorithm
     const primeNumber = 31;
     for (let i = 0; i < key.length; i++) {
       hashCode = primeNumber * hashCode + key.charCodeAt(i);
-      hashCode = hashCode % len;
+      hashCode = hashCode % capacity; // we are scaling our hash down to the range of our bucket capacity (0-16) initially.
     }
-
     return hashCode;
   }
 
+  // the function below is single handedly responsible for 
+  // - handling the process of adding new key - value pairs
+  // - handling the process of replacing value of an existing key 
   #add(key, value) {
     const k = this.#hash(key, this.capacity);
     if (this.indexer[k].length == 0) {
@@ -62,7 +64,7 @@ class HashMap {
     }
   }
 
-  // get value of a key
+  // get value assciated with a key
   get(key) {
     const k = this.#hash(key, this.capacity);
     let result = this.indexer[k].find((value) => value[0] == key)[1];
@@ -84,7 +86,6 @@ class HashMap {
     });
     return "Removed -> " + key;
   }
-
   // get the number of stored keys in the hashmap
   length() {
     let length = 0;
@@ -93,12 +94,10 @@ class HashMap {
     });
     return length;
   }
-
   // clear the whole thing
   clear() {
     return (this.indexer = new HashMap().indexer);
   }
-
   // get the list of stored keys
   keys() {
     let keys = [];
@@ -109,7 +108,6 @@ class HashMap {
     });
     return keys;
   }
-
   // get the list of stored values
   values() {
     let values = [];
@@ -120,17 +118,14 @@ class HashMap {
     });
     return values;
   }
-
   // get a pretty output
   prettyPrint() {
     return JSON.stringify(this.entries(), null, 2);
   }
-
   // check occupied buckets
   entries() {
     return this.indexer.filter((items) => items.length > 0);
   }
-
   // check when to grow the capacity of buckets
   grow() {
     return (this.length() + 1) / this.capacity > this.loadFactor;
