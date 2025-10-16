@@ -2,22 +2,10 @@ class HashMap {
   constructor() {
     this.loadFactor = 0.75; // ratio between total Entries & total capacity, if it exceeds the that threshold we rearrange and grow our number of buckets
     this.indexer = [
-      [],
-      [],
-      [],
-      [],
-      [],
-      [],
-      [], // 16 initial buckets
-      [],
-      [],
-      [],
-      [],
-      [],
-      [],
-      [],
-      [],
-      [],
+      [],[],[],[],
+      [],[],[],[],
+      [],[],[],[],
+      [],[],[],[],
     ];
     this.capacity = this.indexer.length;
   }
@@ -57,20 +45,19 @@ class HashMap {
 
   // set the keys and values
   set(key, value) {
-    if(this.grow()){
+    if (this.grow()) {
       let keys = this.keys();
       let values = this.values();
-      this.indexer = []
-      for (let cap=0; cap<this.capacity*2; cap++){
+      this.indexer = [];
+      for (let cap = 0; cap < this.capacity * 2; cap++) {
         this.indexer.push([]);
       }
       this.capacity = this.indexer.length;
-      for(let i=0; i < keys.length; i++){
+      for (let i = 0; i < keys.length; i++) {
         this.#add(keys[i], values[i]);
       }
       this.#add(key, value);
-    }
-    else{
+    } else {
       this.#add(key, value);
     }
   }
@@ -95,7 +82,7 @@ class HashMap {
         this.indexer[k].splice(idx, 1);
       }
     });
-    return "Removed -> "+key;
+    return "Removed -> " + key;
   }
   // get the number of stored keys in the hashmap
   length() {
@@ -137,6 +124,7 @@ class HashMap {
     return JSON.stringify(this.entries(), null, 2);
   }
 
+  // check occupied buckets
   entries() {
     return this.indexer.filter((items) => items.length > 0);
   }
@@ -147,6 +135,7 @@ class HashMap {
   }
 }
 const test = new HashMap();
+console.log(test.prettyPrint());
 test.set("apple", "red");
 test.set("banana", "yellow");
 test.set("carrot", "orange");
@@ -163,6 +152,7 @@ test.set("lion", "golden");
 test.set("moon", "silver");
 
 // let's test it out
+console.log(test.prettyPrint());
 console.table(test.entries());
 console.table(test.get("apple"));
 console.table(test.has("apple"));
@@ -175,4 +165,3 @@ console.table(test.length());
 console.table(test.keys());
 console.table(test.values());
 console.table(test.clear());
-console.table(test.indexer);
