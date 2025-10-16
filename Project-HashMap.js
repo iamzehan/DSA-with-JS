@@ -128,7 +128,8 @@ class HashMap {
   }
   // check when to grow the capacity of buckets
   grow() {
-    return (this.length() + 1) / this.capacity > this.loadFactor;
+    // returns true or false based on the current ratio between stored items and capacity
+    return (this.length() + 1) / this.capacity > this.loadFactor; 
   }
 }
 
