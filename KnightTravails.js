@@ -42,6 +42,7 @@ which amounts to (u->v)
 - One step forward, and two steps to the sides (left or right)
 - Two steps forward, and one step to the side (left or right)
 
+
 So, given chessBoard[i][j] position of the Knight currently, all the possible moves
 are - 
 
@@ -50,4 +51,21 @@ are -
 - chessBoard[i+2][j-1] -> two step to the side one step to the left
 - chessBoard[i+2][j+1] -> two step to the side one step to the right
 ------------------------------------------------------------------------------------
+
+Notes: 
+- Each square on the board is a node (vertex)
+- Every possible move is considered an edge.
+- Thus finding the shortest path becomes a graph traversal problem.
+
+Goal: 
+- Finding the shortest route between two nodes.
+
+Tip: 
+- Represent the positions as coordinates -> 0<=i<=7 and 0<=j<=7 
+- Use a queue to keep track of next positions to explore (like in tree BFS)
+- Track the visited positions.
+
+Task: 
+- build a knightMoves function that shows shortest possible ways to get from one square
+to another by outputting all squares the knight will stop on along the way.
 */
