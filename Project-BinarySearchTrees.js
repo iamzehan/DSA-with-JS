@@ -8,6 +8,8 @@
 /* The class Node represents a node in a binary tree with data, left, and right properties. */
 
 import Queue from "./utils/queue.js";
+
+/* The class Node represents a node in a binary tree with data, left, and right properties. */
 class Node {
   constructor(data) {
     this.data = data;
@@ -147,7 +149,7 @@ a breakdown of what the `prettyPrint` function does: */
 
   find(key, root = this.root) {
     if (root === null) {
-      return "Not found";
+      return null;
     }
     if (root.data == key) {
       return root;
@@ -204,7 +206,52 @@ a breakdown of what the `prettyPrint` function does: */
     this.postOrderForEach(callback, root.right);
     callback(root.data);
   }
+/**
+ * The `height` function calculates the height of a binary tree starting from a given key node.
+ * @param key - The `key` parameter in the `height` function represents the key of the node for which
+ * you want to calculate the height in a binary tree. The function finds the node with the given key
+ * and then calculates the height of the subtree rooted at that node.
+ * @returns The `height` function is returning the height of the node with the specified key in a
+ * binary tree. It does this by recursively calculating the height of the left and right subtrees of
+ * the node and returning the maximum height plus one.
+ */
+  height(key){
+    /* The code snippet `const node = this.find(key); if (node==null){ return null; }` is checking if a
+    node with the specified key exists in the binary search tree. */
+    const node = this.find(key);
+    if (node==null){
+      return null;
+    }
+    // let's write a helper recursor that can traverse from our key
+    const calculateHeight = (node) => {
+      if (node==null) return -1;
 
+      const leftHeight = calculateHeight(node.left);
+      const rightHeight = calculateHeight(node.right);
+
+      return Math.max(leftHeight, rightHeight)+1;
+    }
+
+    return calculateHeight(node);
+
+  }
+/**
+ * The depth function in JavaScript calculates the depth of a given key in a binary search tree
+ * starting from the root node.
+ * @param key - The `key` parameter in the `depth` function represents the value that you are searching
+ * for in the binary search tree. The function recursively traverses the tree to find the depth at
+ * which the key is located.
+ * @param [root] - The `root` parameter in the `depth` function represents the current node being
+ * evaluated in a binary search tree. It is the starting point for the search for a specific key within
+ * the tree.
+ * @param [depth=0] - The `depth` function you provided is a recursive function that searches for a key
+ * in a binary search tree and returns the depth at which the key is found. The parameters for the
+ * `depth` function are as follows:
+ * @returns The `depth` function is returning the depth of a node with the specified key in a binary
+ * search tree. If the key is found in the tree, the function returns the depth of that node. If the
+ * key is not found, the function recursively searches the left or right subtree based on the
+ * comparison of the key with the current node's data value. The function increments the depth by 1 for
+ */
   depth(key, root = this.root, depth=0) {
     if (root === null) {
       return 0;
@@ -242,3 +289,4 @@ console.log(tree.prettyPrint());
 // });
 
 // console.log(tree.depth(9));
+// console.log(tree.height(67))
