@@ -224,7 +224,7 @@ a breakdown of what the `prettyPrint` function does: */
 
     return Math.max(leftHeight, rightHeight) + 1;
   };
-  
+
   height(key) {
     /* The code snippet `const node = this.find(key); if (node==null){ return null; }` is checking if a
     node with the specified key exists in the binary search tree. */
@@ -267,6 +267,29 @@ a breakdown of what the `prettyPrint` function does: */
       return this.depth(key, root.right, depth + 1);
     }
   }
+
+/* The below code is implementing a method called `isBalanced` in a JavaScript class. This method is
+used to determine if a binary tree is balanced or not. */
+  isBalanced(root = this.root) {
+    // an empty tree is balanced anyway
+    if (root == null) return true;
+
+    // let's get the heights of left and right subtrees
+    const leftHeight = this.#calculateHeight(root.left);
+    const rightHeight = this.#calculateHeight(root.right);
+
+    // now calculate the difference between them
+    const heightDifference = Math.abs(leftHeight - rightHeight);
+
+    // Condition 1: difference must be <=1
+    const balancedHere = heightDifference <= 1;
+
+    // Condition 2: subtrees must be balanced too
+    const balancedLeft = this.isBalanced(root.left);
+    const balancedRight = this.isBalanced(root.right);
+
+    return balancedHere && balancedRight && balancedLeft;
+  }
 }
 
 const array = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
@@ -289,3 +312,5 @@ console.log(tree.prettyPrint());
 
 // console.log(tree.depth(9));
 // console.log(tree.height(67))
+
+// console.log(tree.isBalanced())
