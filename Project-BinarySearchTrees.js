@@ -20,7 +20,7 @@ class Tree {
     this.root = this.#buildTree(this.#array);
     // pretty print
     this.pretty = "";
-    this.prettyPrint();
+    this.#prettyPrint();
   }
 
   #buildTree = (array) => {
@@ -39,16 +39,16 @@ class Tree {
     return root;
   };
 
-  prettyPrint = (node=this.root, prefix = "", isLeft = true) => {
+  #prettyPrint = (node=this.root, prefix = "", isLeft = true) => {
     if (node === null) {
       return;
     }
     if (node.right !== null) {
-      this.prettyPrint(node.right, `${prefix}${isLeft ? "│   " : "    "}`, false);
+      this.#prettyPrint(node.right, `${prefix}${isLeft ? "│   " : "    "}`, false);
     }
     this.pretty += `\n${prefix}${isLeft ? "└── " : "┌── "}${node.data}`;
     if (node.left !== null) {
-      this.prettyPrint(node.left, `${prefix}${isLeft ? "    " : "│   "}`, true);
+      this.#prettyPrint(node.left, `${prefix}${isLeft ? "    " : "│   "}`, true);
     }
   };
 }
