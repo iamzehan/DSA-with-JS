@@ -22,7 +22,7 @@ class Tree {
     this.root = this.#buildTree(this.#array);
   }
 
-/* The `#buildTree` method in the `Tree` class is a private method that recursively constructs a binary
+  /* The `#buildTree` method in the `Tree` class is a private method that recursively constructs a binary
 search tree from a sorted array of unique values. Here's a breakdown of what the method does: */
   #buildTree = (array) => {
     // base case
@@ -40,7 +40,7 @@ search tree from a sorted array of unique values. Here's a breakdown of what the
     return root;
   };
 
-/* The `prettyPrint` function in the code is a method of the `Tree` class. It is a recursive function
+  /* The `prettyPrint` function in the code is a method of the `Tree` class. It is a recursive function
 that helps in visually displaying the binary search tree in a structured and readable format. Here's
 a breakdown of what the `prettyPrint` function does: */
   prettyPrint = (node = this.root, prefix = "", isLeft = true) => {
@@ -59,16 +59,16 @@ a breakdown of what the `prettyPrint` function does: */
       this.prettyPrint(node.left, `${prefix}${isLeft ? "    " : "│   "}`, true);
     }
   };
-/**
- * The insert function recursively inserts a new node with a given key into a binary search tree.
- * @param key - The `key` parameter represents the value that you want to insert into the binary search
- * tree.
- * @param [root] - The `root` parameter in the `insert` function represents the root node of a binary
- * search tree where the `key` needs to be inserted. If the `root` is `null`, it means the tree is
- * empty, and a new node with the `key` value will be created as
- * @returns The `insert` method is returning the updated root node of the binary search tree after
- * inserting the new key.
- */
+  /**
+   * The insert function recursively inserts a new node with a given key into a binary search tree.
+   * @param key - The `key` parameter represents the value that you want to insert into the binary search
+   * tree.
+   * @param [root] - The `root` parameter in the `insert` function represents the root node of a binary
+   * search tree where the `key` needs to be inserted. If the `root` is `null`, it means the tree is
+   * empty, and a new node with the `key` value will be created as
+   * @returns The `insert` method is returning the updated root node of the binary search tree after
+   * inserting the new key.
+   */
   insert(key, root = this.root) {
     if (root === null) {
       return new Node(key);
@@ -142,13 +142,33 @@ a breakdown of what the `prettyPrint` function does: */
     }
     return root;
   }
+
+  find(key, root = this.root, pretty = false) {
+    if (root === null) {
+      return "Not found";
+    }
+    if (root.data == key){
+        return root;
+    }
+    // If key is smaller, look in the left subtree.
+    if (root.data > key) {
+      return this.find(key, root.left);
+    }
+    // If key is larger, look in the right subtree.
+    else if (root.data < key) {
+      return this.find(key, root.right);
+    }
+  }
 }
 
 const array = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
 const tree = new Tree(array);
 // console.log(JSON.stringify(tree, null, 2));
-console.log(tree.pretty);
-console.log(JSON.stringify(tree.insert(40), null, 2));
-console.log(tree.prettyPrint());
-console.log(tree.delete(6345));
-console.log(tree.prettyPrint());
+// console.log(tree.pretty);
+// console.log(JSON.stringify(tree.insert(40), null, 2));
+// console.log(tree.prettyPrint());
+// console.log(tree.delete(6345));
+// console.log(tree.prettyPrint());
+// tree.prettyPrint(tree.find(67));
+
+
