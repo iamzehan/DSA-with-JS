@@ -145,7 +145,7 @@ a breakdown of what the `prettyPrint` function does: */
     return root;
   }
 
-  find(key, root = this.root, pretty = false) {
+  find(key, root = this.root) {
     if (root === null) {
       return "Not found";
     }
@@ -204,6 +204,23 @@ a breakdown of what the `prettyPrint` function does: */
     this.postOrderForEach(callback, root.right);
     callback(root.data);
   }
+
+  height(key, root = this.root, height=0) {
+    if (root === null) {
+      return 0;
+    }
+    if (root.data == key) {
+      return height;
+    }
+    // If key is smaller, look in the left subtree.
+    if (root.data > key) {
+      return this.height(key, root.left, height+1);
+    }
+    // If key is larger, look in the right subtree.
+    else if (root.data < key) {
+      return this.height(key, root.right, height+1);
+    }
+  }
 }
 
 const array = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
@@ -223,3 +240,5 @@ console.log(tree.prettyPrint());
 // tree.inOrderForEach((node) => {
 //   console.log(node);
 // });
+
+console.log(tree.height(9));
