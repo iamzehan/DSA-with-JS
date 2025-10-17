@@ -185,6 +185,25 @@ a breakdown of what the `prettyPrint` function does: */
       }
     }
   }
+
+  preOrderForEach(callback, root = this.root) {
+    if (root == null) return;
+    callback(root.data);
+    this.preOrderForEach(callback, root.left);
+    this.preOrderForEach(callback, root.right);
+  }
+  inOrderForEach(callback, root = this.root) {
+    if (root == null) return;
+    this.inOrderForEach(callback, root.left);
+    callback(root.data);
+    this.inOrderForEach(callback, root.right);
+  }
+  postOrderForEach(callback, root = this.root) {
+    if (root == null) return;
+    this.postOrderForEach(callback, root.left);
+    this.postOrderForEach(callback, root.right);
+    callback(root.data);
+  }
 }
 
 const array = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
@@ -192,11 +211,15 @@ const tree = new Tree(array);
 // console.log(JSON.stringify(tree, null, 2));
 // console.log(tree.pretty);
 // console.log(JSON.stringify(tree.insert(40), null, 2));
-//console.log(tree.prettyPrint());
+console.log(tree.prettyPrint());
 // console.log(tree.delete(6345));
 // console.log(tree.prettyPrint());
 // tree.prettyPrint(tree.find(67));
 // console.log(tree.find(8));
-tree.levelOrderForEach(node=> {
-  console.log(node);
-});
+// tree.levelOrderForEach(node=> {
+//   console.log(node);
+// });
+
+// tree.inOrderForEach((node) => {
+//   console.log(node);
+// });
