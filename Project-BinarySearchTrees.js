@@ -82,8 +82,7 @@ a breakdown of what the `prettyPrint` function does: */
     } else {
       root.right = this.insert(key, root.right);
     }
-    this.root = root;
-    return this.root;
+    return root;
   }
 
   // #getSuccessor() finds the next smallest value greater than the node being deleted.
@@ -188,18 +187,53 @@ a breakdown of what the `prettyPrint` function does: */
     }
   }
 
+  /**
+   * The `preOrderForEach` function recursively traverses a binary tree in pre-order and applies a
+   * callback function to each node's data.
+   * @param callback - The `callback` parameter is a function that will be called on each node's data
+   * value during a pre-order traversal of a binary tree.
+   * @param [root] - The `root` parameter in the `preOrderForEach` method represents the starting point
+   * of the traversal in a binary tree. It is the node from which the traversal begins, and the method
+   * recursively traverses the tree starting from this root node.
+   * @returns In the given code snippet, the `preOrderForEach` method is a recursive function that
+   * performs a pre-order traversal of a binary tree. It applies the provided `callback` function to
+   * each node's data in the tree. If the `root` node is null, the function simply returns without
+   * doing anything.
+   */
   preOrderForEach(callback, root = this.root) {
     if (root == null) return;
     callback(root.data);
     this.preOrderForEach(callback, root.left);
     this.preOrderForEach(callback, root.right);
   }
+  /**
+   * The `inOrderForEach` function recursively traverses a binary tree in in-order fashion and applies
+   * a callback function to each node's data.
+   * @param callback - The `callback` parameter is a function that will be called on each node's data
+   * value during an in-order traversal of a binary tree.
+   * @param [root] - The `root` parameter in the `inOrderForEach` function represents the starting
+   * point or the root node of the binary tree from which the traversal will begin. It is the node from
+   * which the in-order traversal will start.
+   * @returns If the `root` is `null`, the function will return and exit without executing any further
+   * code.
+   */
   inOrderForEach(callback, root = this.root) {
     if (root == null) return;
     this.inOrderForEach(callback, root.left);
     callback(root.data);
     this.inOrderForEach(callback, root.right);
   }
+  /**
+   * The `postOrderForEach` function recursively traverses a binary tree in post-order and applies a
+   * callback function to each node's data.
+   * @param callback - The `callback` parameter is a function that will be called on each node's data
+   * value during a post-order traversal of the binary tree.
+   * @param [root] - The `root` parameter in the `postOrderForEach` method refers to the starting point
+   * or the root node of the binary tree where the traversal will begin. It is the node from which the
+   * post-order traversal will start.
+   * @returns In the `postOrderForEach` method, if the `root` is `null`, the method will return without
+   * executing any further code.
+   */
   postOrderForEach(callback, root = this.root) {
     if (root == null) return;
     this.postOrderForEach(callback, root.left);
@@ -290,6 +324,21 @@ used to determine if a binary tree is balanced or not. */
 
     return balancedHere && balancedRight && balancedLeft;
   }
+
+/**
+ * The `reBalance` function checks if a binary tree is balanced, and if not, rebuilds it to balance it.
+ * @returns The `reBalance()` function returns `undefined`.
+ */
+  reBalance(){
+    if (this.isBalanced()){
+      console.log("Is balanced already 👍🏻");
+      return;
+    }
+    const values = [];
+    this.inOrderForEach(node=> values.push(node));
+    this.root = this.#buildTree(values);
+    console.success("Tree has been balanced! ✅")
+  }
 }
 
 const array = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
@@ -306,11 +355,8 @@ console.log(tree.prettyPrint());
 //   console.log(node);
 // });
 
-// tree.inOrderForEach((node) => {
-//   console.log(node);
-// });
-
 // console.log(tree.depth(9));
 // console.log(tree.height(67))
 
 // console.log(tree.isBalanced())
+// console.log(tree.reBalance());
