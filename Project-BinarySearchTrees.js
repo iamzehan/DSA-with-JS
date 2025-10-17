@@ -6,6 +6,8 @@
 // It's supposed to be easy now, so let's go!
 
 /* The class Node represents a node in a binary tree with data, left, and right properties. */
+
+import Queue from "./utils/queue.js";
 class Node {
   constructor(data) {
     this.data = data;
@@ -147,8 +149,8 @@ a breakdown of what the `prettyPrint` function does: */
     if (root === null) {
       return "Not found";
     }
-    if (root.data == key){
-        return root;
+    if (root.data == key) {
+      return root;
     }
     // If key is smaller, look in the left subtree.
     if (root.data > key) {
@@ -159,6 +161,30 @@ a breakdown of what the `prettyPrint` function does: */
       return this.find(key, root.right);
     }
   }
+
+  levelOrderForEach(callbackNode) {
+    if (typeof callbackNode !== "function") {
+      throw new Error(
+        "A callback function is required for levelOrderForEach()."
+      );
+    }
+    if (this.root == null) {
+      return;
+    }
+    const Q = new Queue();
+    Q.enqueue(this.root);
+
+    while (!Q.isEmpty()) {
+      let currentNode = Q.dequeue();
+      callbackNode(currentNode.data);
+      if (currentNode.left != null) {
+        Q.enqueue(currentNode.left);
+      }
+      if (currentNode.right != null) {
+        Q.enqueue(currentNode.right);
+      }
+    }
+  }
 }
 
 const array = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
@@ -166,9 +192,11 @@ const tree = new Tree(array);
 // console.log(JSON.stringify(tree, null, 2));
 // console.log(tree.pretty);
 // console.log(JSON.stringify(tree.insert(40), null, 2));
-// console.log(tree.prettyPrint());
+//console.log(tree.prettyPrint());
 // console.log(tree.delete(6345));
 // console.log(tree.prettyPrint());
 // tree.prettyPrint(tree.find(67));
-
-
+// console.log(tree.find(8));
+tree.levelOrderForEach(node=> {
+  console.log(node);
+});
