@@ -18,9 +18,6 @@ class Tree {
     // remove duplicates and sort the array
     this.#array = [...new Set(array)].sort((a, b) => a - b);
     this.root = this.#buildTree(this.#array);
-    // pretty print
-    this.pretty = "";
-    this.#prettyPrint();
   }
 
   #buildTree = (array) => {
@@ -39,21 +36,37 @@ class Tree {
     return root;
   };
 
-  #prettyPrint = (node=this.root, prefix = "", isLeft = true) => {
+  prettyPrint = (node=this.root, prefix = "", isLeft = true) => {
     if (node === null) {
       return;
     }
     if (node.right !== null) {
-      this.#prettyPrint(node.right, `${prefix}${isLeft ? "│   " : "    "}`, false);
+      this.prettyPrint(node.right, `${prefix}${isLeft ? "│   " : "    "}`, false);
     }
-    this.pretty += `\n${prefix}${isLeft ? "└── " : "┌── "}${node.data}`;
+    console.log(`\n${prefix}${isLeft ? "└── " : "┌── "}${node.data}`);
     if (node.left !== null) {
-      this.#prettyPrint(node.left, `${prefix}${isLeft ? "    " : "│   "}`, true);
+      this.prettyPrint(node.left, `${prefix}${isLeft ? "    " : "│   "}`, true);
     }
   };
+  insert(key, root=this.root){
+    if(root === null){
+        return new Node(key);
+    }
+
+    if (key < root.data){
+        root.left = this.insert(key, root.left);
+    }
+    else{
+        root.right = this.insert(key, root.right);
+    }
+    this.root = root;
+    return this.root;
+  }
 }
 
 const array = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
 const tree = new Tree(array);
 // console.log(JSON.stringify(tree, null, 2));
 console.log(tree.pretty);
+console.log(JSON.stringify(tree.insert(40), null, 2));
+console.log(tree.prettyPrint());
