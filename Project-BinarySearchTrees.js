@@ -205,20 +205,20 @@ a breakdown of what the `prettyPrint` function does: */
     callback(root.data);
   }
 
-  height(key, root = this.root, height=0) {
+  depth(key, root = this.root, depth=0) {
     if (root === null) {
       return 0;
     }
     if (root.data == key) {
-      return height;
+      return depth;
     }
     // If key is smaller, look in the left subtree.
     if (root.data > key) {
-      return this.height(key, root.left, height+1);
+      return this.depth(key, root.left, depth+1);
     }
     // If key is larger, look in the right subtree.
     else if (root.data < key) {
-      return this.height(key, root.right, height+1);
+      return this.depth(key, root.right, depth+1);
     }
   }
 }
@@ -241,4 +241,4 @@ console.log(tree.prettyPrint());
 //   console.log(node);
 // });
 
-console.log(tree.height(9));
+// console.log(tree.depth(9));
