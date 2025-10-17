@@ -5,6 +5,7 @@
 // We are also aware of the BFS and DFS at this point
 // It's supposed to be easy now, so let's go!
 
+/* The class Node represents a node in a binary tree with data, left, and right properties. */
 class Node {
   constructor(data) {
     this.data = data;
@@ -12,6 +13,7 @@ class Node {
     this.right = null;
   }
 }
+/* The Tree class removes duplicates and sorts an array to build a tree structure. */
 class Tree {
   #array;
   constructor(array) {
@@ -20,6 +22,8 @@ class Tree {
     this.root = this.#buildTree(this.#array);
   }
 
+/* The `#buildTree` method in the `Tree` class is a private method that recursively constructs a binary
+search tree from a sorted array of unique values. Here's a breakdown of what the method does: */
   #buildTree = (array) => {
     // base case
     if (array.length === 0) return null;
@@ -36,6 +40,9 @@ class Tree {
     return root;
   };
 
+/* The `prettyPrint` function in the code is a method of the `Tree` class. It is a recursive function
+that helps in visually displaying the binary search tree in a structured and readable format. Here's
+a breakdown of what the `prettyPrint` function does: */
   prettyPrint = (node = this.root, prefix = "", isLeft = true) => {
     if (node === null) {
       return;
@@ -52,11 +59,20 @@ class Tree {
       this.prettyPrint(node.left, `${prefix}${isLeft ? "    " : "│   "}`, true);
     }
   };
+/**
+ * The insert function recursively inserts a new node with a given key into a binary search tree.
+ * @param key - The `key` parameter represents the value that you want to insert into the binary search
+ * tree.
+ * @param [root] - The `root` parameter in the `insert` function represents the root node of a binary
+ * search tree where the `key` needs to be inserted. If the `root` is `null`, it means the tree is
+ * empty, and a new node with the `key` value will be created as
+ * @returns The `insert` method is returning the updated root node of the binary search tree after
+ * inserting the new key.
+ */
   insert(key, root = this.root) {
     if (root === null) {
       return new Node(key);
     }
-
     if (key < root.data) {
       root.left = this.insert(key, root.left);
     } else {
@@ -65,44 +81,63 @@ class Tree {
     this.root = root;
     return this.root;
   }
+
+  // #getSuccessor() finds the next smallest value greater than the node being deleted.
   #getSuccessor(currentNode) {
-    // child of the deleted key go to it's right
+    // Go one step to the right of the node you’re deleting.
     currentNode = currentNode.right;
-    // keep looking at the left of it before you hit a leaf node
+    // Then go as far left as possible — that gives you the smallest value in that right subtree.
     while (currentNode !== null && currentNode.left != null)
       currentNode = currentNode.left;
-    // return that node
+    // Return that node — it’s the “successor.”
     return currentNode;
   }
+  /**
+   * The function `delete` in JavaScript is used to remove a node from a binary search tree by finding
+   * the node to delete based on its key and handling different cases such as having 0, 1, or 2
+   * children.
+   * @param key - The `key` parameter in the `delete` function represents the value that you want to
+   * remove from the binary search tree. When you call the `delete` function with a specific key, it
+   * will search for that key in the tree and remove the node containing that key while maintaining the
+   * binary search tree
+   * @param [root] - The `root` parameter in the `delete` function represents the root node of a binary
+   * search tree (BST) where you want to delete a node with a specific key. The function recursively
+   * searches for the node with the given key in the BST starting from the root node. If the key is
+   * found
+   * @returns The `delete` method is returning the updated root node of the binary search tree after
+   * deleting the node with the specified key.
+   */
   delete(key, root = this.root) {
     if (root == null) {
       return root;
     }
-    // navigate / look for the key
+    // If key is smaller, look in the left subtree.
     if (root.data > key) {
       root.left = this.delete(key, root.left);
-    } else if (root.data < key) {
+    }
+    // If key is larger, look in the right subtree.
+    else if (root.data < key) {
       root.right = this.delete(key, root.right);
     }
-    // after finding the key 
+    // If it matches → we found the node to delete.
     else {
       // Node with 0 or 1 child
       // if left child doesn't exist
       if (root.left == null) {
-        // go to the right key
+        // return right child
         return root.right;
       }
-      // if the right child doesn't exist 
+      // if the right child doesn't exist
       else if (root.right == null) {
-        // go to the left key
+        // return left child.
         return root.left;
       }
-      // whatever root we have matched now from the children of the matched key
-      // we are going to make them a successor to the deleted key
+      // If Node has 2 children
+      // 1. Find in order successor
       const successor = this.#getSuccessor(root);
-      // replace the current root's data with the successor's data
+      // 2. Copy its value into the current node (overwrite root.data).
       root.data = successor.data;
-      // cleanup the successor data
+      // 3. Delete that successor node from the right subtree (it’s a duplicate now).
       root.right = this.delete(successor.data, root.right);
     }
     return root;
