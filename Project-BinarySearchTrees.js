@@ -36,31 +36,76 @@ class Tree {
     return root;
   };
 
-  prettyPrint = (node=this.root, prefix = "", isLeft = true) => {
+  prettyPrint = (node = this.root, prefix = "", isLeft = true) => {
     if (node === null) {
       return;
     }
     if (node.right !== null) {
-      this.prettyPrint(node.right, `${prefix}${isLeft ? "│   " : "    "}`, false);
+      this.prettyPrint(
+        node.right,
+        `${prefix}${isLeft ? "│   " : "    "}`,
+        false
+      );
     }
     console.log(`\n${prefix}${isLeft ? "└── " : "┌── "}${node.data}`);
     if (node.left !== null) {
       this.prettyPrint(node.left, `${prefix}${isLeft ? "    " : "│   "}`, true);
     }
   };
-  insert(key, root=this.root){
-    if(root === null){
-        return new Node(key);
+  insert(key, root = this.root) {
+    if (root === null) {
+      return new Node(key);
     }
 
-    if (key < root.data){
-        root.left = this.insert(key, root.left);
-    }
-    else{
-        root.right = this.insert(key, root.right);
+    if (key < root.data) {
+      root.left = this.insert(key, root.left);
+    } else {
+      root.right = this.insert(key, root.right);
     }
     this.root = root;
     return this.root;
+  }
+  #getSuccessor(currentNode) {
+    // child of the deleted key go to it's right
+    currentNode = currentNode.right;
+    // keep looking at the left of it before you hit a leaf node
+    while (currentNode !== null && currentNode.left != null)
+      currentNode = currentNode.left;
+    // return that node
+    return currentNode;
+  }
+  delete(key, root = this.root) {
+    if (root == null) {
+      return root;
+    }
+    // navigate / look for the key
+    if (root.data > key) {
+      root.left = this.delete(key, root.left);
+    } else if (root.data < key) {
+      root.right = this.delete(key, root.right);
+    }
+    // after finding the key 
+    else {
+      // Node with 0 or 1 child
+      // if left child doesn't exist
+      if (root.left == null) {
+        // go to the right key
+        return root.right;
+      }
+      // if the right child doesn't exist 
+      else if (root.right == null) {
+        // go to the left key
+        return root.left;
+      }
+      // whatever root we have matched now from the children of the matched key
+      // we are going to make them a successor to the deleted key
+      const successor = this.#getSuccessor(root);
+      // replace the current root's data with the successor's data
+      root.data = successor.data;
+      // cleanup the successor data
+      root.right = this.delete(successor.data, root.right);
+    }
+    return root;
   }
 }
 
@@ -69,4 +114,6 @@ const tree = new Tree(array);
 // console.log(JSON.stringify(tree, null, 2));
 console.log(tree.pretty);
 console.log(JSON.stringify(tree.insert(40), null, 2));
+console.log(tree.prettyPrint());
+console.log(tree.delete(6345));
 console.log(tree.prettyPrint());
